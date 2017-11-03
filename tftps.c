@@ -96,7 +96,7 @@ int main(int argc, char **argv)
     unsigned short sent_num;
     struct sockaddr_storage client_addr;
     struct sockaddr_in addr;
-    char packet[MAXCHAR], ErrorCode[10], ErrMsg[50], ACK[10], BlockNo[10], Mode[10], Filename[10], pack[20],ch, nextch = -1, data[MAXCHAR], errmsg[100], datapack[517], send_pack[517], childport[10], msg[50];
+    char packet[MAXCHAR], ErrorCode[10], ErrMsg[50], ACK[10], BlockNo[10], Mode[10], Filename[10], pack[20],ch, nextch = -1, data[MAXCHAR], errmsg[100], datapack[517], send_pack[517], childport[10], msg[50], buf;
     FILE *fp;
     socklen_t addr_len;
     char s[INET6_ADDRSTRLEN];
@@ -365,7 +365,7 @@ int main(int argc, char **argv)
                 else if(packet[1] == 2)    //WRQ
                 {
                     
-                    fprintf(stdout, "Debug - Entered WRQ\n");
+                    //fprintf(stdout, "Debug - Entered WRQ\n");
                     read_flag = 0;
                     write_flag = 1;     //Client requested for writing
                     
@@ -407,10 +407,10 @@ int main(int argc, char **argv)
                         //Building the ACK packet
                         //mode_flag = 1;
                         sprintf(ACK, "%c%c%c%c", 0x00, 0x04, 0x00, 0x00); // ACK of the first data block
-                        printf("ACK: %d%d%d%d\n", ACK[0], ACK[1], ACK[2], ACK[3]);
+                        //printf("ACK: %d%d%d%d\n", ACK[0], ACK[1], ACK[2], ACK[3]);
                         memcpy(send_pack, ACK, HEADER);
                         size_sp = HEADER;
-                        printf("send pack: %s\n", send_pack);
+                        //printf("send pack: %s\n", send_pack);
                         //Transmitting the packet over the network to the client
                         if ((sent_bytes = sendto(childsockfd, send_pack, size_sp, 0, (struct sockaddr *)&client_addr, addr_len)) <= ERROR)
                         {
@@ -419,7 +419,7 @@ int main(int argc, char **argv)
                         }
                         else
                         {
-                            printf("Debug: ACK sent.\n");
+                            //printf("Debug: ACK sent.\n");
                             block_number = 1;
                         }
                     }
@@ -429,6 +429,7 @@ int main(int argc, char **argv)
                 
                 while(1)
                 {
+
                     if(timeout(childsockfd,1) == 0)
                     {
 						if((read_flag == 1) && (write_flag == 0))
@@ -451,6 +452,28 @@ int main(int argc, char **argv)
 		                        }
 		                    }
                         }
+						if((read_flag == 0) && (write_flag == 1))
+						{
+	                        sprintf(packet,"%c%c",0x00,0x03);
+                            Intermediate = (block_number)%65536;
+                            sent_num = Intermediate;
+
+                            packet[2]=(sent_num & 0xFF00) >> 8;
+                            packet[3]=(sent_num & 0x00FF);
+                            buf = '\0';
+
+	                        
+                            memcpy((char*)(packet+4), &buf, sizeof(buf));
+
+	                        time_count++;
+	                        if(time_count >= 2)
+	                        {
+	                        	printf("File has been successfully written.\n");
+	                            stop_flag = 1;  //Stop the transfer if number of timeouts exceed 10
+	                            break;
+	                        }
+		                    
+                        }
                     }
                     else
                     {
@@ -464,7 +487,6 @@ int main(int argc, char **argv)
                         length = sizeof(packet);
                         
                         //////////////////////////////////////////////////////////////////////////////
-                        
                         if(packet[1] == 3)    //DATA
                         {
                             memset(send_pack, 0, sizeof(send_pack));
@@ -501,15 +523,14 @@ int main(int argc, char **argv)
                                 //Parsing the received data packet
                                 memcpy(BlockNo, packet+2, 2);
                                 memcpy(data, packet+4, length-4);
-                                //printf("debug: data: %s\n", data);
                                 //Writing the data into a file
-                                printf("Debug: The size of received block is %d\n", strlen(data));
-                                for(count = 0; count < NOBYTES; count++)
+                                
+                                for(count = 0; count < strlen(data); count++)
                                 {
                                     if(nextch >= 0)
                                     {
                                         putc(nextch, fp);
-                                        printf("debug: nextch[if nextch >= 0]: %c\n", nextch);
+
                                         nextch = -1;
                                         continue;
                                     }
@@ -518,7 +539,7 @@ int main(int argc, char **argv)
 
                                     if(ch == EOF)
                                     {
-                                    	printf("debug: ch == EOF\n");
+
                                         stop_flag = 1;     //Stop the transfer if file has been written completely
                                         //break;      //Does this break need to be placed here or after  the EOF has been written to the file?
                                     }
@@ -528,18 +549,18 @@ int main(int argc, char **argv)
                                     	//printf("Debug: Message type: NETASCII\n");
                                         if(ch == '\n')
                                         {
-	                                    	printf("debug: ch == n\n");
+	                                    	//printf("debug: ch == n\n");
                                             ch = '\r';
                                             nextch = '\n';
                                         }
                                         else if(ch == '\r')
                                         {
-                                        	printf("debug: ch == r\n");
+                                        	//printf("debug: ch == r\n");
                                             nextch = '\0';
                                         }
                                         else
                                         {
-                                        	printf("debug: ELSE\n");
+                                        	//printf("debug: ELSE\n");
                                             nextch = -1;
                                         }
                                     }
@@ -570,16 +591,20 @@ int main(int argc, char **argv)
                                 }
                                 else 
                                 {
-                                    printf("Debug: ACK sent; block number = %d\n", block_number);
+                                    //printf("Debug: ACK sent; block number = %d\n", block_number);
                                     block_number++;
+                                    // flush the data
+
+                                    
+
                                 }
                                 if(stop_flag == 1)
                                 {
-                                                                printf("stop");
+
                                     //stop_flag = 1;  //Stop the transfer if writing the file is completed:Debug
                                     break;
                                 }
-                                                                printf("L581");
+
                             }
                         }
                         
@@ -627,7 +652,7 @@ int main(int argc, char **argv)
                                         //binary /octlet mode
                                         count = NOBYTES;
                                         read_size = read(read_fd, data, count);
-                                        printf("Size = %d\n", read_size);
+                                        //printf("Size = %d\n", read_size);
                                         if (read_size < 0)
                                         {
                                             perror("Error reading the requested file: \n");
@@ -721,8 +746,8 @@ int main(int argc, char **argv)
                             stop_flag = 1;      //Stop the transfer if an error is encountered
                             break;
                         }
-                        printf("packet = %c", packet[1]);
-                                                                                        printf("L724" );
+
+                        memset(packet, 0, sizeof(packet));
                     }
                 }
                 
