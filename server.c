@@ -17,6 +17,8 @@
 #include <string.h>
 #include <errno.h>
 #include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include <netdb.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -27,6 +29,7 @@
 #include <sys/select.h>
 #include <signal.h>
 #include <sys/wait.h>
+
 //Defining constants
 #define ERROR -1        //Error Value
 #define MAXCHAR 1000    //Maximum number of characters that should be accepted
@@ -73,6 +76,15 @@ void *get_in_addr(struct sockaddr *sa)
     return &(((struct sockaddr_in6*)sa)->sin6_addr);
 }
 
+void dec2bin(int num, char *str)
+{
+  *(str+5) = '\0';
+  int mask = 0x10 << 1;
+  while(mask >>= 1)
+    *str++ = !!(mask & num) + '0';
+}
+	
+
 //main()
 int main(int argc, char **argv)
 {
@@ -89,6 +101,10 @@ int main(int argc, char **argv)
     socklen_t addr_len;
     char s[INET6_ADDRSTRLEN];
     struct sigaction sa;
+    
+    int read_fd, read_size;
+    
+    
     
     //Server attempts to connect to the given port using datagram socket
     memset(&server, 0, sizeof(server));
@@ -204,10 +220,132 @@ int main(int argc, char **argv)
                     if((strcmp(Mode, "octet") == 0) || (strcmp(Mode, "OCTET") == 0))
                     {
                         mode_flag = 0;
+                        printf("octlet mode\n");
+                        if ((read_fd = open(Filename, O_RDWR, 0666)) < 0) {
+                        	perror("open\n");
+                        	exit(1);
+                    	}
+                    	lseek(read_fd, 0, SEEK_SET);
+                    	count = NOBYTES;
+                    	if ((read_size = read(read_fd, data, count)) < 0) {
+                    		perror("Read\n");
+                    		exit(1);
+                		}
+                		
+		                sprintf(datapack,"%c%c%c%c",0x00,0x03,0x00,0x01);   //Building the header of the data packet to be sent
+		                memcpy(datapack+4, data, count);    //Completing the data packet with the data
+		                //fprintf(stdout,"Debug: data = %s\n",data);
+		                memcpy(send_pack,datapack,count+HEADER);
+		                //printf("\n RRQ Debug: datapack = %s \n RRQ Debug: Send packet = %s \n",datapack,send_pack);
+		                //fprintf(stdout,"Debug: data in datapack = %s\n",datapack[4]);
+		                size_sp = count+HEADER;
+		                
+		                //Transmitting the packet over the network to the client
+		                if ((sent_bytes = sendto(childsockfd, send_pack, size_sp, 0, (struct sockaddr *)&client_addr, addr_len)) <= ERROR)
+		                {
+		                    perror("Error sending Data Packet:");
+		                    exit(1);
+		                }
+		                else
+						{
+		                	block_number=1;
+		                    //printf("Debug: Packet 0 sent.\n");
+		                }
+                        
                     }
                     else if((strcmp(Mode, "netascii") == 0) || (strcmp(Mode, "NETASCII") == 0))
                     {
+                    	printf("netascii mode\n");
                         mode_flag = 1;
+                        //Opening the file requested by client in read mode
+		                fp = fopen(Filename, "r");
+		                
+		                //If the file does not exist, server sends an error packet
+		                if(fp == NULL)
+		                {
+		                    //Building the error packet
+		                    sprintf(errmsg, "%c%c%c%c", 0x00, 0x05, 0x00, 0x01);
+		                    strcpy(msg, "File not found");
+		                    memcpy(errmsg+4, msg, strlen(msg));
+		                    
+		                    memcpy(send_pack, errmsg, strlen(msg)+HEADER);
+		                    size_sp = strlen(msg)+HEADER;
+		                    
+		                    //Transmitting the packet over the network to the client
+		                    if ((sent_bytes = sendto(childsockfd, send_pack, size_sp, 0, (struct sockaddr *)&client_addr, addr_len)) <= ERROR)
+		                    {
+		                        perror("Error sending Error Packet:");
+		                        exit(1);
+		                    }
+		                    else
+		                    {
+		                        stop_flag = 1;  //Stop the transfer if an error is encountered
+		                        break;
+		                    }
+		                }
+		                
+		                //Reads the file according in the mode requested by the client
+		                for(count = 0; count < NOBYTES; count++)
+		                {
+		                    if(nextch >= 0)
+		                    {
+		                        data[count] = nextch;
+		                        nextch = -1;
+		                        continue;
+		                    }
+		                    
+		                    ch = getc(fp);  //Fetching the character from the file
+		                    
+		                    if(ch == EOF)
+		                    {
+		                        if(ferror(fp))
+		                            printf("read error from fgetc");
+		                        stop_flag = 1;  //Stop the transfer once the file has been read completely
+		                        break;
+		                    }
+		                    
+		                    //Inserting a Carriage Return (CR) character before every Line Fee (LF) character for the case when mode is NETASCII
+		                    if(mode_flag == 1)
+		                    {
+		                        if(ch == '\n')
+		                        {
+		                            ch = '\r';
+		                            nextch = '\n';
+		                        }
+		                        else if(ch == '\r')
+		                        {
+		                            nextch = '\0';
+		                        }
+		                        else
+		                        {
+		                            nextch = -1;
+		                        }
+		                    }
+		                    
+		                    data[count] = ch;   //Storing the read character in the data buffer
+		                    if(stop_flag == 1)
+		                        break;
+		                }
+		                
+		                sprintf(datapack,"%c%c%c%c",0x00,0x03,0x00,0x01);   //Building the header of the data packet to be sent
+		                memcpy(datapack+4, data, count);    //Completing the data packet with the data
+		                //fprintf(stdout,"Debug: data = %s\n",data);
+		                memcpy(send_pack,datapack,count+HEADER);
+		                //printf("\n RRQ Debug: datapack = %s \n RRQ Debug: Send packet = %s \n",datapack,send_pack);
+		                //fprintf(stdout,"Debug: data in datapack = %s\n",datapack[4]);
+		                size_sp = count+HEADER;
+		                
+		                //Transmitting the packet over the network to the client
+		                if ((sent_bytes = sendto(childsockfd, send_pack, size_sp, 0, (struct sockaddr *)&client_addr, addr_len)) <= ERROR)
+		                {
+		                    perror("Error sending Data Packet:");
+		                    exit(1);
+		                }
+		                else
+						{
+		                	block_number=1;
+		                    //printf("Debug: Packet 0 sent.\n");
+		                }
                     }
                     else
                     {
@@ -230,95 +368,7 @@ int main(int argc, char **argv)
                             break;          //Stop the transfer if an error is encountered
                         }
                     }
-                    //Opening the file requested by client in read mode
-                    fp = fopen(Filename, "r");
-                    
-                    //If the file does not exist, server sends an error packet
-                    if(fp == NULL)
-                    {
-                        //Building the error packet
-                        sprintf(errmsg, "%c%c%c%c", 0x00, 0x05, 0x00, 0x01);
-                        strcpy(msg, "File not found");
-                        memcpy(errmsg+4, msg, strlen(msg));
-                        
-                        memcpy(send_pack, errmsg, strlen(msg)+HEADER);
-                        size_sp = strlen(msg)+HEADER;
-                        
-                        //Transmitting the packet over the network to the client
-                        if ((sent_bytes = sendto(childsockfd, send_pack, size_sp, 0, (struct sockaddr *)&client_addr, addr_len)) <= ERROR)
-                        {
-                            perror("Error sending Error Packet:");
-                            exit(1);
-                        }
-                        else
-                        {
-                            stop_flag = 1;  //Stop the transfer if an error is encountered
-                            break;
-                        }
-                    }
-                    
-                    //Reads the file according in the mode requested by the client
-                    for(count = 0; count < NOBYTES; count++)
-                    {
-                        if(nextch >= 0)
-                        {
-                            data[count] = nextch;
-                            nextch = -1;
-                            continue;
-                        }
-                        
-                        ch = getc(fp);  //Fetching the character from the file
-                        
-                        if(ch == EOF)
-                        {
-                            if(ferror(fp))
-                                printf("read error from fgetc");
-                            stop_flag = 1;  //Stop the transfer once the file has been read completely
-                            break;
-                        }
-                        
-                        //Inserting a Carriage Return (CR) character before every Line Fee (LF) character for the case when mode is NETASCII
-                        if(mode_flag == 1)
-                        {
-                            if(ch == '\n')
-                            {
-                                ch = '\r';
-                                nextch = '\n';
-                            }
-                            else if(ch == '\r')
-                            {
-                                nextch = '\0';
-                            }
-                            else
-                            {
-                                nextch = -1;
-                            }
-                        }
-                        
-                        data[count] = ch;   //Storing the read character in the data buffer
-                        if(stop_flag == 1)
-                            break;
-                    }
-                    
-                    sprintf(datapack,"%c%c%c%c",0x00,0x03,0x00,0x01);   //Building the header of the data packet to be sent
-                    memcpy(datapack+4, data, count);    //Completing the data packet with the data
-                    //fprintf(stdout,"Debug: data = %s\n",data);
-                    memcpy(send_pack,datapack,count+HEADER);
-                    //printf("\n RRQ Debug: datapack = %s \n RRQ Debug: Send packet = %s \n",datapack,send_pack);
-                    //fprintf(stdout,"Debug: data in datapack = %s\n",datapack[4]);
-                    size_sp = count+HEADER;
-                    
-                    //Transmitting the packet over the network to the client
-                    if ((sent_bytes = sendto(childsockfd, send_pack, size_sp, 0, (struct sockaddr *)&client_addr, addr_len)) <= ERROR)
-                    {
-                        perror("Error sending Data Packet:");
-                        exit(1);
-                    }
-                    else
-					{
-                    	block_number=1;
-                        //printf("Debug: Packet 0 sent.\n");
-                    }
+
                 }
                 
                 //////////////////////////////////////////////////////////////////////////////////////
@@ -328,7 +378,7 @@ int main(int argc, char **argv)
                     
                     fprintf(stdout, "Debug - Entered WRQ");
                     read_flag = 0;
-                    write_flag = 1;     //Client requested for reading
+                    write_flag = 1;     //Client requested for writing
                     
                     //Parsing the filename and mode requested by the client
                     strcpy(Filename,packet+2);
@@ -366,10 +416,12 @@ int main(int argc, char **argv)
                     else
                     {
                         //Building the ACK packet
-                        sprintf(ACK, "%c%c%c%c", 0x00, 0x04, 0x00, 0x00);
+                        //mode_flag = 1;
+                        sprintf(ACK, "%c%c%c%c", 0x00, 0x04, 0x00, 0x00); // ACK of the first data block
+                        printf("ACK: %c%c%c%c\n", ACK[0], ACK[1], ACK[2], ACK[3]);
                         memcpy(send_pack, ACK, HEADER);
                         size_sp = HEADER;
-                        
+                        printf("send pack: %s\n", send_pack);
                         //Transmitting the packet over the network to the client
                         if ((sent_bytes = sendto(childsockfd, send_pack, size_sp, 0, (struct sockaddr *)&client_addr, addr_len)) <= ERROR)
                         {
@@ -433,10 +485,10 @@ int main(int argc, char **argv)
                             memset(ACK, 0, sizeof(ACK));
                             
                             //If the clients sends an ACK packet when it had originally requested for writing a file, server sends an error
-                            if((read_flag == 1) || (write_flag == 0))
+                            if((read_flag == 1) || (write_flag == 0)) // whats this for???
                             {
                                 //Building the error packet
-                                sprintf(errmsg, "%c%c%c%c", 0x00, 0x05, 0x00, 0x02);
+                                sprintf(errmsg, "%c%c%c%c", 0x00, 0x05, 0x00, 0x00);
                                 strcpy(msg, "Access violation.");
                                 memcpy(errmsg+4, msg, strlen(msg));
                                 memcpy(send_pack,errmsg, strlen(msg)+HEADER);
@@ -471,7 +523,7 @@ int main(int argc, char **argv)
                                     }
                                     
                                     ch = data[count];   //Getting the data from the packet
-                                    
+
                                     if(ch == EOF)
                                     {
                                         stop_flag = 1;     //Stop the transfer if file has been written completely
@@ -480,6 +532,7 @@ int main(int argc, char **argv)
                                     //Inserting a Carriage Return (CR) character before every Line Fee (LF) character for the case when mode is NETASCII
                                     if(mode_flag == 1)
                                     {
+                                    	//printf("Debug: Message type: NETASCII\n");
                                         if(ch == '\n')
                                         {
                                             ch = '\r';
@@ -497,40 +550,43 @@ int main(int argc, char **argv)
 
                                     //Writing the data character into the file
                                     putc(ch, fp);
-                                    
+                                    printf("%c", ch);
 //                                    if(stop_flag == 1)
 //                                        break;
                                 }
                                 
                                 //Building an ACK packet for the received data packet
                                 sprintf(ACK, "%c%c", 0x00, 0x04);
+                                //printf("ACK: %c%c\n", ACK[0], ACK[1]);
                                 Intermediate = (block_number+1)%65536;
                                 sent_num = Intermediate;
-                                datapack[2]=(sent_num & 0xFF00) >> 8;
-                                datapack[3]=(sent_num & 0x00FF);
-                                memcpy(send_pack, ACK, HEADER);
-                                size_sp = HEADER;
-                                
+                                send_pack[2]=(sent_num & 0xFF00) >> 8;
+                                send_pack[3]=(sent_num & 0x00FF);
+                                printf("send_pack[3][4]: %d%d\n", send_pack[2], send_pack[3]);
+                                memcpy(send_pack, ACK, 2);
+                                size_sp = 4;
+                                printf("send pack: %d%d%d%d\n", send_pack[0], send_pack[1], send_pack[2], send_pack[3]);
                                 //Transmitting the packet over the network to the client
                                 if ((sent_bytes = sendto(childsockfd, send_pack, size_sp, 0, (struct sockaddr *)&client_addr, addr_len)) <= ERROR)
                                 {
                                     perror("Error sending ACK:");
                                     exit(1);
                                 }
-                                else
-                                    printf("Debug: ACK sent.\n");
-                                
+                                else 
+                                    printf("Debug: ACK sent; block number = %d\n", block_number);
+                                    
                                 if(block_number == final)
                                 {
                                     stop_flag = 1;  //Stop the transfer if writing the file is completed
                                     break;
                                 }
+                                block_number++;
                             }
                         }
                         //////////////////////////////////////////////////////////////////////////////
                         else if(packet[1] == 04)    //ACK
                         {
-                        	//printf("\n Debug: Naa shaardam ACK lo unna \n");
+                        	printf("\n Debug: ACK \n");
                             memset(send_pack, 0, sizeof(send_pack));
                             memset(BlockNo, 0, sizeof(BlockNo));
                             memset(data, 0, sizeof(data));
@@ -577,78 +633,99 @@ int main(int argc, char **argv)
 //                               printf("Debug: I am here2\n");
 //                               printf("Debug: I am here3\n");
                                     //Reading the data from the file
-                                    for(count = 0; count < NOBYTES; count++)
-                                    {
-//                                    	printf("Debug: Count = %d\n",count);
-                                    	
-                                        /*if(count == 2474){
-                                    		printf("I am hereeeeeeeeee!!!\n");
-                                    		continue;
-                                    	}*/
-                                        
-                                        if(nextch >= 0)
-                                        {
-                                            data[count] = nextch;
-                                            nextch = -1;
-//                                            printf("Debug: if(nextch >= 0)!!!\n");
-                                            continue;
-                                        }
-                                        
-                                        ch = getc(fp);      //Fetching the character from the file
-//                                        printf("Debug: ((((((%c))))))",ch);
-                                        
-                                        /*if((ch == EOF))
-                                        {
-                                                if(count%512 == 0)
-                                                {
-                                                    nextch = '\0';    //dummy packet
-                                                    //final = block_number+2;
-                                                }
-                                                else
-                                                {
-                                                    //final = block_number+1;
-                                                }
-                                            //                        return(count);
-                                        }*/
-                                        
-					                    if(ch == EOF)
-										 {
-										 	//printf("Debug: Finalllllllll");
-										 	//printf("Debug: Finalllllllll");
-										 	//printf("Debug: Finalllllllll");
-										 	//printf("Debug: Finalllllllll");
-											 if(ferror(fp))
-                                                 printf("read error from fgetc");
-											 stop_flag = 1;     //Stop the transfer if file is read has been completely
-											 //printf("Debug: I am at break now\n");
-											 break;
-										 }
-                                        
-                                        //Inserting a Carriage Return (CR) character before every Line Fee (LF) character for the case when mode is NETASCII
-                                        if(mode_flag == 1)
-                                        {
-                                            if(ch == '\n')
-                                            {
-                                                ch = '\r';
-                                                nextch = '\n';
-                                            }
-                                            else if(ch == '\r')
-                                            {
-                                                nextch = '\0';
-                                            }
-                                            else
-                                            {
-                                                nextch = -1;
-                                            }
-                                        }
-                                        
-                                        data[count] = ch;   //Storing the character in a data buffer
-                                        // printf("Debug: Outside\n");
-                                        
-                                        //if((final == block_number+2) || (final == block_number+1))
-                                           // break;
-                                    }
-                                    
+									if(mode_flag == 0) { //binary /octlet mode
+										count = NOBYTES;
+										read_size = read(read_fd, data, count);
+										printf("Size = %d\n", read_size);
+								    	if (read_size < 0) {
+								    		perror("Read\n");
+								    		exit(1);
+										}
+										if (read_size < NOBYTES) {
+											count  = read_size;
+											stop_flag = 1;
+											printf("Last block!\n");
+										}
+										/*
+										if (read_size == 0) {
+											count  = read_size;
+											stop_flag = 1;
+											printf("End of file\n");
+										}*/
+
+									}
+                                	if(mode_flag == 1) {
+				                        for(count = 0; count < NOBYTES; count++)
+				                        {
+		//                                    	printf("Debug: Count = %d\n",count);
+				                        	
+				                            /*if(count == 2474){
+				                        		printf("I am hereeeeeeeeee!!!\n");
+				                        		continue;
+				                        	}*/
+				                            
+				                            if(nextch >= 0)
+				                            {
+				                                data[count] = nextch;
+				                                nextch = -1;
+		//                                            printf("Debug: if(nextch >= 0)!!!\n");
+				                                continue;
+				                            }
+				                            
+				                            ch = getc(fp);      //Fetching the character from the file
+		//                                        printf("Debug: ((((((%c))))))",ch);
+				                            
+				                            /*if((ch == EOF))
+				                            {
+				                                    if(count%512 == 0)
+				                                    {
+				                                        nextch = '\0';    //dummy packet
+				                                        //final = block_number+2;
+				                                    }
+				                                    else
+				                                    {
+				                                        //final = block_number+1;
+				                                    }
+				                                //                        return(count);
+				                            }*/
+				                            
+									        if(ch == EOF)
+											 {
+											 	//printf("Debug: Finalllllllll");
+											 	//printf("Debug: Finalllllllll");
+											 	//printf("Debug: Finalllllllll");
+											 	//printf("Debug: Finalllllllll");
+												 if(ferror(fp))
+				                                     printf("read error from fgetc");
+												 stop_flag = 1;     //Stop the transfer if file is read has been completely
+												 //printf("Debug: I am at break now\n");
+												 break;
+											 }
+				                            
+				                            //Inserting a Carriage Return (CR) character before every Line Fee (LF) character for the case when mode is NETASCII
+
+				                            if(ch == '\n')
+				                            {
+				                                ch = '\r';
+				                                nextch = '\n';
+				                            }
+				                            else if(ch == '\r')
+				                            {
+				                                nextch = '\0';
+				                            }
+				                            else
+				                            {
+				                                nextch = -1;
+				                            }
+
+				                            
+				                            data[count] = ch;   //Storing the character in a data buffer
+				                            // printf("Debug: Outside\n");
+				                            
+				                            //if((final == block_number+2) || (final == block_number+1))
+				                               // break;
+		                                }
+	                                }
                                     //Building the next data packet to be sent
                                     sprintf(datapack,"%c%c",0x00,0x03);
                                     Intermediate = (block_number+1)%65536;
@@ -705,6 +782,7 @@ int main(int argc, char **argv)
                 if(stop_flag == 1)
                 {
                     fclose(fp);         //Closes the file
+                    close(read_fd);
                     close(childsockfd); //Closing the child server
                     exit(0);
                 }
