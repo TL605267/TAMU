@@ -26,7 +26,7 @@
 #include <netdb.h>
 #include <sys/select.h>
 #include <signal.h>
-
+#include <sys/wait.h>
 //Defining constants
 #define ERROR -1        //Error Value
 #define MAXCHAR 1000    //Maximum number of characters that should be accepted
@@ -79,7 +79,8 @@ int main(int argc, char **argv)
     //Declaring and intializing the variables used in the program
     int sockfd, childsockfd;
     struct addrinfo server, *servinfo, *res, child, *childinfo;  //
-    int val, childval, recv_bytes, length, sent_bytes, count, errnum, read_flag = 0, write_flag = 0, stop_flag = 0, final = -1, mode_offset,yes=1, size_sp, Intermediate = 0; mode_flag = -1, time_count = 0;
+    int val, childval, recv_bytes, length, sent_bytes, count, errnum, read_flag = 0, write_flag = 0, stop_flag = 0, final = -1, mode_offset,yes=1, size_sp, Intermediate = 0, mode_flag = -1, time_count = 0;
+    unsigned short block_number = 0;
     unsigned short sent_num;
 	struct sockaddr_storage client_addr;
     struct sockaddr_in addr;
