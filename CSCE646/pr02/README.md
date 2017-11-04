@@ -1,4 +1,4 @@
-# CSCE646 Project#02 README 
+# CSCE646 Project2 
 
 ## Table of Contents
 
