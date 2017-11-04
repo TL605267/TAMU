@@ -1,4 +1,4 @@
-//tftps.c
+// server.c
 // Trivial File Transfer Protocol (TFTP) Server
 //
 // Transfers files between two systems in both directions using the User Datagram Protocol (UDP)
