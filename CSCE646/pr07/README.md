@@ -1,10 +1,10 @@
 # CSCE646 Project7: wrapping
 
 ## Table of Contents
-1. [Problem Description](#problemdescription)
-2. [Project Requirements](#projectrequirements)
-3. [Build Instructions](#buildinstructions)
-4. [Demo Instructions](#demoinstructions)
+1. [Problem Description](#problem-description)
+2. [Project Requirements](#project-requirements)
+3. [Build Instructions](#build-instructions)
+4. [Demo Instructions](#demo-instructions)
 
 ## Problem Description
 You will develop a warping tool that provide bilinear and a general transformation.
