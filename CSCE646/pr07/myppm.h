@@ -7,6 +7,8 @@
 #include <sstream>
 #include <string>
 
+#define MY_DEBUG 0
+
 using namespace std;
 
 struct RGB {
@@ -22,6 +24,7 @@ struct RGB {
 		green  = RGB2.green;
 		blue = RGB2.blue;
 	}
+
 };
 
 struct XY {
@@ -41,6 +44,7 @@ class myppm {
 
 public: 
 	RGB *pixel_map;
+	RGB *map1;
 	RGB *output_map;
 	int read_ppm (void);
 	void clean_up(ifstream &file);
@@ -75,6 +79,7 @@ void myppm::ppm_init(string name) {
 	clean_up(file_in);
 	
 	getline(file_in, current_line);
+	
 	istringstream(current_line) >> width >> height;
 	
 	clean_up(file_in);
@@ -90,7 +95,6 @@ void myppm::ppm_init(string name) {
 	translation = XY(0,0);
 	
 	pixel_map = new RGB[size];
-	
 	clean_up(file_in);
 	
 		//read bytes for pixel map (pixmap data)
@@ -136,18 +140,21 @@ void myppm::transformation(double *mtrx, int dimension, XY point) {
 					//cout << "x = " << x << "y = " << y << endl;
 					if (x >= 0 && x < width && y >= 0 && y < height) {
 						new_index = y * width + x;
-						// cout <<"["<<x<<", "<<y<<"]"<<endl;
+						if (MY_DEBUG) {
+							cout<<"Width ="<<width<<endl;
+							cout << "("<<i<<", "<<j<<") => ("<<x<<", "<<y<<"); [index = "<< index<<"]"<<endl;
+						}
 						if (new_index < size && new_index >= 0) {
 							output_map[new_index] = pixel_map[index];
 						}
 					}
 				}
-			}
+			}	
 			// inverse mapping
-			
+			if (MY_DEBUG) cout << "===========Inverse==========="<<endl;
 			double x_origin, y_origin, index_origin, tx, ty;
 			double det = mtrx[0]*mtrx[3] - mtrx[1]*mtrx[2];
-			cout <<"det = "<<det<<endl;
+			if (MY_DEBUG) cout <<"det = "<<det<<endl;
 			RGB red = RGB(255,0,0);
 			for(int i = 0; i < width; i++) {
 				for(int j = 0; j < height; j++) {
@@ -161,14 +168,19 @@ void myppm::transformation(double *mtrx, int dimension, XY point) {
 						//cout <<"det = "<<det<<"; i = "<<i <<"; j = "<< j<< "| x_origin = "<< x_origin <<"; y_origin = " << y_origin << endl;
 						//x_origin = i - center.x;
 						//y_origin = j - center.y;
+
 						x_origin = (mtrx[3]*(i - center.x) - mtrx[1]*(j - center.y))/det + center.x;
 						y_origin = (-mtrx[2]*(i - center.x) + mtrx[0]*(j - center.y))/det + center.y;
 						//tx = x_origin - floor(x_origin);
 						//ty = y_origin - floor(y_origin);
 						if (x_origin >= 0 && y_origin >= 0 && x_origin <= double(width) && y_origin <= double(height)) {
-							index_origin = y_origin * width + width - x_origin;
+							index_origin = int(y_origin) * width + int(x_origin);
 							if (index_origin >= 0 && index_origin < size) {
 								//output_map[index] = red;
+								if (MY_DEBUG) {
+									cout<<"Width ="<<width<<endl;
+									cout << "("<<i<<", "<<j<<") => ("<<x_origin<<", "<<y_origin<<"); [index_origin = "<< int(index_origin)<<"]"<<endl;
+								}
 								output_map[index] = pixel_map[int(index_origin)];
 							}
 						}

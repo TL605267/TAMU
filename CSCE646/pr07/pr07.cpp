@@ -86,20 +86,20 @@ int main(int argc, char *argv[]) {
 		if ((string)argv[1] == "rotation") {
 			dem = 2;
 			double PI = 3.1415926;
-			double theta = PI/12;
+			double theta = PI/12; // 30deg
 			//translation_point  =XY(255, 170);
 			mtrx[0] = cos(theta);;
 			mtrx[1] = -sin(theta);
 			mtrx[2] = sin(theta);
 			mtrx[3] = cos(theta);
-									cout << "a = " <<mtrx[0]<<"; b = "<<mtrx[1]<<"; c = "<<mtrx[2]<<"; d = "<<mtrx[3]<<endl;
+
 	  	}
 		if ((string)argv[1] == "scaling") {
 			dem = 2;
-			mtrx[0] = 1.2;
+			mtrx[0] = 2;
 			mtrx[1] = 0;
 			mtrx[2] = 0;
-			mtrx[3] = 1.2;
+			mtrx[3] = 2;
 	  	}
 		if ((string)argv[1] == "shear") {
 			dem = 2;
