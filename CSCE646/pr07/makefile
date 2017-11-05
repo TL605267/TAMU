@@ -7,8 +7,8 @@
 
 CC		= g++ -std=c++11
 LDFLAGS 	= -lglut -lGL -lm
-PROJECT		= pr06
-FILES		= pr06.cpp
+PROJECT		= pr07
+FILES		= pr07.cpp
 
 ${PROJECT}:${FILES}
 	${CC} ${CFLAGS} -o ${PROJECT} ${FILES} ${LDFLAGS}
