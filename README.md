@@ -1,6 +1,6 @@
 # TAMU Courses
 
-This is my course projects at Texas A&M University
+Here are my course projects at Texas A&M University.
 
 ## CSCE646: Digital Image
 
