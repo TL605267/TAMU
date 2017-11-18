@@ -1,4 +1,3 @@
-#README
 ## ECEN 602 NETWORK PROGRAMMING ASSIGNMENT #2
 ### TEAM 15 (Tong Lu, Jyothsna Kurra)
 
