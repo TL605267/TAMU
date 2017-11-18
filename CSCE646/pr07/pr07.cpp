@@ -83,7 +83,7 @@ int main(int argc, char *argv[]) {
 		double mtrx[9];
 		int dem;
 		XY translation_point(0,0);	
-		if ((string)argv[1] == "rotation") {
+		if ((string)argv[1] == "rotation"||(string)argv[1] == "r") {
 			dem = 2;
 			double PI = 3.1415926;
 			double theta = PI/12; // 30deg
@@ -109,7 +109,7 @@ int main(int argc, char *argv[]) {
 			mtrx[2] = 0.1;
 			mtrx[3] = 0.7;
 	  	}
-		if ((string)argv[1] == "mirror") {
+		if ((string)argv[1] == "mirror" || (string)argv[1] == "m") {
 			dem = 2;
 			translation_point  =XY(255, 170);
 			mtrx[0] = 1;
@@ -117,9 +117,9 @@ int main(int argc, char *argv[]) {
 			mtrx[2] = 0;
 			mtrx[3] = -1;
 	  	}
-		if ((string)argv[1] == "translation") {
+		if ((string)argv[1] == "translation" || (string)argv[1] == "t") {
 			dem = 3;
-			translation_point  =XY(100, 100);
+			translation_point  =XY(-225, -170);
 			mtrx[0] = 1;
 			mtrx[1] = 0;
 			mtrx[2] = translation_point.x;
@@ -130,19 +130,52 @@ int main(int argc, char *argv[]) {
 			mtrx[7] = 0;
 			mtrx[8] = 1;
 	  	}	
-		if ((string)argv[1] == "perspective") {
+		if ((string)argv[1] == "perspective" || (string)argv[1] == "p") {
 			dem = 3;
-			mtrx[0] = 0.4;
-			mtrx[1] = 0.2;
-			mtrx[2] = 0.2;
-			mtrx[3] = 0.2;
-			mtrx[4] = 0.4;
-			mtrx[5] = 1.6;
-			mtrx[6] = 0;
-			mtrx[7] = 0.2;
-			mtrx[8] = 0.2;
+
+			mtrx[0] = 1.255;
+			mtrx[1] = 0.255;
+			mtrx[2] = -108.375;
+			mtrx[3] = 0.17;
+			mtrx[4] = 1.17;
+			mtrx[5] = -72.25;
+			mtrx[6] = 0.001;
+			mtrx[7] = 0.001;
+			mtrx[8] = 0.575;
+
 	  	}
-	  	ppm.transformation(mtrx, dem, translation_point);
+	  	
+		if ((string)argv[1] == "bilinear" || (string)argv[1] == "b") {
+			dem = 3;
+			
+			mtrx[0] = 0.526549;
+			mtrx[1] = -0.156458;
+			mtrx[2] = 187.085;
+			mtrx[3] = 0.26632;
+			mtrx[4] = 0.44932;
+			mtrx[5] = 32.64;
+			mtrx[6] = 0.0005;
+			mtrx[7] = 0.0005;
+			mtrx[8] = 1;
+
+	  	}
+	  	
+		if ((string)argv[1] == "special" || (string)argv[1] == "s") {
+			dem = 3;
+			
+			mtrx[0] = 1;
+			mtrx[1] = 0;
+			mtrx[2] = 0;
+			mtrx[3] = 0;
+			mtrx[4] = 1;
+			mtrx[5] = 0;
+			mtrx[6] = 0;
+			mtrx[7] = 0;
+			mtrx[8] = 1;
+
+	  	}
+	  	
+	  	ppm.transformation(mtrx, dem, translation_point, argv[1] );
 		glutInit(&argc, argv);
 		glutInitWindowPosition(100, 100); // Where the window will display on-screen.
 		glutInitWindowSize(ppm.width, ppm.height);

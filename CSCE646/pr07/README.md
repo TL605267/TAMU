@@ -18,6 +18,17 @@ You are supposed to implement following methods to get the full credit. Each one
 Bonus: Any additional work with bi-quadric or bi-cubic tranformations can give you bonus points up to half of the project credit. In this case, you need to use a forward transformation and open-GL.
 For the required parts of the project, , implement your operations only using the basic programming operations such as while or for loops and basic mathematical operations such as addition, subtraction, multiplication, division and power. In other words, no high level operation provided by some programming languages such as matrix multiplication or matrix inversion is allowed.
 
+## Code Description
+I only finished the first part of the requirement, and my program can transform the image as following:
+
+[0,0] =====> [187,33]
+
+[510,0] ===> [363,134]
+
+[0,340] ===> [114,158]
+
+[510,340] => [282,225]
+
 ## Build Instructions
 
 make
@@ -26,4 +37,4 @@ make
 
 ### Bilinear
 
-./pr07 bilinear
+./pr07 bilinear tower.ppm

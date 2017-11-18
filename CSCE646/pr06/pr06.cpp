@@ -96,10 +96,10 @@ int main(int argc, char *argv[]) {
 	  	}
 		if ((string)argv[1] == "scaling") {
 			dem = 2;
-			mtrx[0] = 1.2;
+			mtrx[0] = 1.3;
 			mtrx[1] = 0;
 			mtrx[2] = 0;
-			mtrx[3] = 1.2;
+			mtrx[3] = 1.3;
 	  	}
 		if ((string)argv[1] == "shear") {
 			dem = 2;
@@ -132,15 +132,15 @@ int main(int argc, char *argv[]) {
 	  	}	
 		if ((string)argv[1] == "perspective") {
 			dem = 3;
-			mtrx[0] = 0.4;
-			mtrx[1] = 0.2;
-			mtrx[2] = 0.2;
-			mtrx[3] = 0.2;
-			mtrx[4] = 0.4;
-			mtrx[5] = 1.6;
-			mtrx[6] = 0;
-			mtrx[7] = 0.2;
-			mtrx[8] = 0.2;
+			mtrx[0] = 1;
+			mtrx[1] = 0;
+			mtrx[2] = 5;
+			mtrx[3] = 1;
+			mtrx[4] = 10;
+			mtrx[5] = 5;
+			mtrx[6] = 0.01;
+			mtrx[7] = 0.01;
+			mtrx[8] = 1;
 	  	}
 	  	ppm.transformation(mtrx, dem, translation_point);
 		glutInit(&argc, argv);
