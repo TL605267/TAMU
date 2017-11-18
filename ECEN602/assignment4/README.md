@@ -1,154 +1,90 @@
-## ECEN 602 NETWORK PROGRAMMING ASSIGNMENT #2
+# ECEN 602 
+# NETWORK PROGRAMMING ASSIGNMENT #4
 ### TEAM 15 (Tong Lu, Jyothsna Kurra)
 
-####ROLE OF EACH TEAM MEMBER:
+One Paragraph of project description goes here
 
-Tong developed the Server.
-Jyothsna worked on the Client code and validated the Test Cases.
+## Getting Started
 
-####WHAT’S INSIDE?
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-The package contains five files:
-1. server.h
-2. makefile
-3. server_main.cpp
-4. server.cpp
-5. client.c6. README.docx
-7. Report
+### Prerequisites
 
-####INSTRUCTIONS:
+What things you need to install the software and how to install them
 
-1. In order to compile the server code, run the ‘make’.
+```
+Give examples
+```
 
-2. In order to compile the server code, run the ‘make client’.
+### Installing
 
-3. Upon successful compilation, run the server. On the command line, type: ./server_ip server_port max_clients
+A step by step series of examples that tell you have to get a development env running
 
-4. Next, run the client by typing on the command line: ./client username server_ip server_port
+Say what the step will be
 
-5. To clean the executables run the ‘make clean’.
+```
+Give the example
+```
 
-####SOCKET PROGRAMMING:
-Socket programming is a way of connecting two nodes on a network to communicate with each
-other. One socket (namely, the server) binds itself to an arbitrary port and starts listening for
-connection requests on that port whilst the other node (or) socket (namely, the client) reaches
-out to it with connection requests. Once connected, both the client and the server exchange
-data. When the client is done exchanging the data, it closes its socket. The server has the
-ability to connect to multiple clients at the same time and exchange data with each client
-separately.
+And repeat
 
-####NETWORK PROTOCOL:
-A network protocol gives a set of rules and conventions for communication between network
-devices. Network protocols include mechanisms for devices to identify and make connections
-with each other across the network, as well as rules that specify how data is packed into
-message packets.
+```
+until finished
+```
 
-####SIMPLE BROADCAST CHAT PROTOCOL (SBCP) DESCRIPTION:
-The Simple Broadcast Chat Protocol (SBCP) is a protocol that allows clients to join and leave
-a global chat session, view members of the session, and send and receive messages.
-For this assignment, we have to implement a simple TCP Broadcast Chat Server and Client.
-Essentially, our goal is to come up with a client - server model where:
+End with an example of getting some data out of the system or using it for a little demo
 
-1. The server should be able to handle multiple clients. There is an upper cap on the number
-of clients it can handle.
+## Running the tests
 
-2. The client could request the server to join a chat session
+Explain how to run the automated tests for this system
 
-3. If the server could accommodate the client, it should send an acknowledgement (ACK) to
-the client which contains the number of clients present in the chat session at that instance
-and the users (excluding the client) that are present in the chat session.
+### Break down into end to end tests
 
-4. If the server is unable to accommodate the client, it should send a NAK to the client stating
-the reason for rejection.
+Explain what these tests test and why
 
-5. Once in the chat session, the client could now receive the messages sent by other users
-and server.
+```
+Give an example
+```
 
-6. The client could also send messages to other users via the server (chat text is read from
-the standard input)
+### And coding style tests
 
-7. The server should forward the chat text received from one client to all the other clients.
+Explain what these tests test and why
 
-8. The server should forward any status message regarding other clients from the server.
+```
+Give an example
+```
 
-9. The client should receive any status message regarding other clients from the server.
+## Deployment
 
-10. The client sends an IDLE message informing server that it has been idle for more than 10
-seconds.
+Add additional notes about how to deploy this on a live system
 
-11. The server informs the other clients about an idle client if it receives an idle message.At any point, if the server or the clients connected to it are not able to understand a received
-packet, they should discard it. Additionally, we also need to equip the server to handle multiple
-clients.
+## Built With
 
-####CLIENT:
+* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
+* [Maven](https://maven.apache.org/) - Dependency Management
+* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
 
-The Client has been developed using C. The client is essentially taking care of following things
+## Contributing
 
-1. Connecting to a remote server
+Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
 
-2. Initiating a JOIN with server using username supplied on the command line
+## Versioning
 
-3. Receiving ACK/NAK from the server depending upon whether the join request was
-accepted or rejected by the server
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
-4. Reading user input and sends the same to the server
+## Authors
 
-5. Receiving messages (sent by other clients) from the server
+* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
 
-6. Receiving messages from server which informs the status of other clients in the same chat
-session
+See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
-7. Monitoring its (self) idle time and sends an IDLE message to server when it is idle for more
-than 10 seconds
+## License
 
-Socket was created using the socket() function. The inputs to the function are IP Family,
-Socket Type of the socket to be created and the protocol to be used with that socket. It, in turn,
-returns the socket file descriptor of the newly created socket. This new socket file descriptor
-is used to represent the client. In case of any error encountered during the creation of socket,
-the socket file descriptor turns out to be a non-positive value. In case of error, the program is
-terminated and the corresponding error message is displayed.
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
-The remote server details are initialized.
+## Acknowledgments
 
-Once the client socket is created, it attempts to connect to the remote server. connect() is used
-for this purpose. The inputs to connect() are the client socket file descriptor, details of the
-remote server to whom the client wishes to connect to, and the size of the remote server
-details. It, in turn, returns the status of the connection. If the connection is successfully
-established, a value for 0 is returned. In case of any error encountered while establishing
-connection, the return value turns out to be -1. In case of error, the program is terminated and
-the corresponding error message is displayed.
+* Hat tip to anyone who's code was used
+* Inspiration
+* etc
 
-If connection is successfully established, the server sends a JOIN request. In case of any error
-encountered while establishing connection, the return value turns out to be -1. In case of error,
-the program is terminated and the corresponding error message is displayed.
-
-Next, the variables used for select() I/O multiplexing are initialized. The client checks whether
-it needs to check for idle time or not. If yes, then, it computes the idle time and compares it
-with the upper bound. If the idle time is greater than 10 seconds, the client sends an IDLE
-message. In case of any error encountered while establishing connection, the return value
-turns out to be -1. In case of error, the program is terminated and the corresponding error
-message is displayed.
-
-The client also checks for activity on the socket file descriptor and standard input. If the client
-gives an input via STDIN, the input is SEND to the server as a chat text. In case of any error
-encountered while establishing connection, the return value turns out to be -1. In case of error,
-the program is terminated and the corresponding error message is displayed. If the client
-receives a message from receiver, it shall parse the packet using the SBCP Message type
-and SBCP attribute type and display the corresponding messages.
-
-SERVER:The Server was developed using C++.
-
-The Socket was created the same way as we did in asignment1: socket() for creating socket, bind to
-port using bind(), then listen() for the incoming request.
-After the steps above, the file descriptors are monitored by select() to any new data input in a
-infinite while loop. If a input from file descriptors is detected, then the program will run through all the current file descriptors. If the data input is from the server file descriptor, that means a new client request a connection. For this case, the program first check the number of existing current in the chat, if the number reach the maximum number, it will reject the connection and send a NAK
-back to the client with a reason of “Too many users in the room!”. If there is stll room for new user,
-the program then check the name of current user. If a duplicated name is found, the program will
-reject the connection and send a NAK back to the client with a reason of “Username already exist!”.
-If the user-name doesn’t exist, the program then accept the connection and then send an ACK to the
-client, and also forward an ONLINE to everyone else in the chat.
-
-If the data input is from a client file descriptor, the program will check the type of the message and
-then forward to everyone in the room, like regular message, and idle. If the read return a 0 from, the
-program will send a OFFLINE to the everyone else in the chat and then close the corresponding file
-descriptor.
