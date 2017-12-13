@@ -5,10 +5,10 @@
 #
 # http://www.cs.txstate.edu/labs/tutorials/tut_docs/Linux_Prog_Environment.pdf
 
-CC		= g++
+CC		= g++ -std=c++11
 LDFLAGS 	= -lglut -lGL -lm
-PROJECT		= pr02
-FILES		= pr02.cpp
+PROJECT		= pr11
+FILES		= pr11.cpp
 
 ${PROJECT}:${FILES}
 	${CC} ${CFLAGS} -o ${PROJECT} ${FILES} ${LDFLAGS}
