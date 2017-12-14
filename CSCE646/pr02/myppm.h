@@ -7,89 +7,53 @@
 #include <sstream>
 #include <string>
 #include <algorithm>    // std::max
+#include "shape.h"
 
 using namespace std;
+
 
 struct RGB {
 	unsigned char red, green, blue;
 };
 
-
-struct XY {
-	double x;
-	double y;
-	xypair(){};
-	xypair(double x0, double y0): x(x0), y(y0) {}
-};
 class myppm {
 
 public: 
 	RGB *pixel_map;
-	RGB *new_map;
-	int read_ppm (void);
-	void clean_up(ifstream &file);
+	RGB *output_map;
+	myppm();
+	myppm(char* shape, int width0, int height0);
 	int width, height;
-	void ppm_init(string name);
+	void draw_poly(XY* vertex, int n0);
 private: 
-	string ppm_name;
-	fstream file_in;
+	char* type;
+	XY center;
+	XY* vertex;
 };
 
-
-
-void myppm::ppm_init(string name) {
-	ppm_name = name;
-	ifstream file_in(name, ifstream::binary);
-
-	//clean_up(file_in);
-	
-	string current_line;
-	getline(file_in, current_line);
-
-	
-	if (current_line != "P6") {
-		cout<<"Invalid image file!"<<endl;
-		file_in.close();
-		exit(-1);
+myppm::myppm(char* shape, int width0, int height0) {
+	if (shape == "star") {
+		vertex* = new XY[3];
+		vertex[0] = XY(2,0);
+		vertex[1] = XY(-2,2);
+		vertex[2] = XY(-3,-2);
 	}
-	
-	clean_up(file_in);
-	
-	getline(file_in, current_line);
-	istringstream(current_line) >> width >> height;
-	
-	clean_up(file_in);
-	
-	getline(file_in, current_line);
-
-	RGB_range = stoi(current_line);
-	
+	width = width0;
+	height = height0;
 	pixel_map = new RGB[width * height];
-	new_map = new RGB[width * height];
-	clean_up(file_in);
-	
-	//read bytes for pixel map (pixmap data)
-	for(int i = height-1; i >= 0 ; i--) {
-		for(int j = 0; j < width; j++) {
-			int index = i * width + j;
-			char colors[3];
-			file_in.read(colors, sizeof colors);
-			pixel_map[index].red = colors[0];
-			pixel_map[index].green = colors[1];
-			pixel_map[index].blue = colors[2];
-			new_map[index].red = colors[0];
-			new_map[index].green = colors[1];
-			new_map[index].blue = colors[2];
-		}
-	}
-
-	file_in.close();
+	output_map = new RGB[width * height];
+	center.x = width / 2;
+	center.y = height / 2;
 }
 
-
-void myppm::clean_up(ifstream &file) {
-	string dumpster;
-	while(file.peek() == '#') {
-		getline(file, dumpster);
+void myppm::draw_poly (void) {
+	my_poly polygon = my_poly(vertex, n0, center);
+	for(int i = 0; i < width; i++) {
+		for(int j = 0; j < height; j++) {
+			int index = j * width + i;
+			XY A = XY(i,j);
+			if (polygon.is_fill(A)) output_map[index].red = 255;
+			else output_map[index].blue = 255;
+		}
 	}
 }

@@ -64,7 +64,7 @@ static void ppmwindowDisplay(void)
   glClear(GL_COLOR_BUFFER_BIT);
   glRasterPos2i(0,0);
   glPixelStorei(GL_UNPACK_ALIGNMENT,1);
-  glDrawPixels(ppm.width, ppm.height, GL_RGB, GL_UNSIGNED_BYTE, ppm.new_map);
+  glDrawPixels(ppm.width, ppm.height, GL_RGB, GL_UNSIGNED_BYTE, ppm.output_map);
   glFlush();
 }
 
@@ -84,23 +84,14 @@ static void init(void) {
 // =============================================================================
 int main(int argc, char *argv[]) {
 	// initialize the global variables
-	if(argc == 1 || argc == 2 || argc == 3) {
+	if(argc < 2) {
 		cout<<"Not enough arguments!"<<endl;
 		cout<<"Please check README"<<endl;
 		exit(-1);
 	}
 
 	else {
-		ppm.ppm_init(argv[3]);
-		if ((string)argv[1] == "dilation" || (string)argv[1] == "d") {
-			int dem = atoi(argv[2]);
-			ppm.dilation(dem);
-
-		}
-		else {
-			cout << "Invalid argument!" <<endl;	
-			exit(-1);
-		}	
+		ppm = ppm(argv[1], 800, 600);
 		glutInit(&argc, argv);
 		glutInitWindowPosition(100, 100); // Where the window will display on-screen.
 		glutInitWindowSize(ppm.width, ppm.height);
