@@ -1,0 +1,582 @@
+zynq> /mnt/devtest 
+Multiplier is opened
+0 * 0 = 0
+Result Correct!
+0 * 1 = 0
+Result Correct!
+0 * 2 = 0
+Result Correct!
+0 * 3 = 0
+Result Correct!
+0 * 4 = 0
+Result Correct!
+0 * 5 = 0
+Result Correct!
+0 * 6 = 0
+Result Correct!
+0 * 7 = 0
+Result Correct!
+0 * 8 = 0
+Result Correct!
+0 * 9 = 0
+Result Correct!
+0 * 10 = 0
+Result Correct!
+0 * 11 = 0
+Result Correct!
+0 * 12 = 0
+Result Correct!
+0 * 13 = 0
+Result Correct!
+0 * 14 = 0
+Result Correct!
+0 * 15 = 0
+Result Correct!
+0 * 16 = 0
+Result Correct!
+1 * 0 = 0
+Result Correct!
+1 * 1 = 1
+Result Correct!
+1 * 2 = 2
+Result Correct!
+1 * 3 = 3
+Result Correct!
+1 * 4 = 4
+Result Correct!
+1 * 5 = 5
+Result Correct!
+1 * 6 = 6
+Result Correct!
+1 * 7 = 7
+Result Correct!
+1 * 8 = 8
+Result Correct!
+1 * 9 = 9
+Result Correct!
+1 * 10 = 10
+Result Correct!
+1 * 11 = 11
+Result Correct!
+1 * 12 = 12
+Result Correct!
+1 * 13 = 13
+Result Correct!
+1 * 14 = 14
+Result Correct!
+1 * 15 = 15
+Result Correct!
+1 * 16 = 16
+Result Correct!
+2 * 0 = 0
+Result Correct!
+2 * 1 = 2
+Result Correct!
+2 * 2 = 4
+Result Correct!
+2 * 3 = 6
+Result Correct!
+2 * 4 = 8
+Result Correct!
+2 * 5 = 10
+Result Correct!
+2 * 6 = 12
+Result Correct!
+2 * 7 = 14
+Result Correct!
+2 * 8 = 16
+Result Correct!
+2 * 9 = 18
+Result Correct!
+2 * 10 = 20
+Result Correct!
+2 * 11 = 22
+Result Correct!
+2 * 12 = 24
+Result Correct!
+2 * 13 = 26
+Result Correct!
+2 * 14 = 28
+Result Correct!
+2 * 15 = 30
+Result Correct!
+2 * 16 = 32
+Result Correct!
+3 * 0 = 0
+Result Correct!
+3 * 1 = 3
+Result Correct!
+3 * 2 = 6
+Result Correct!
+3 * 3 = 9
+Result Correct!
+3 * 4 = 12
+Result Correct!
+3 * 5 = 15
+Result Correct!
+3 * 6 = 18
+Result Correct!
+3 * 7 = 21
+Result Correct!
+3 * 8 = 24
+Result Correct!
+3 * 9 = 27
+Result Correct!
+3 * 10 = 30
+Result Correct!
+3 * 11 = 33
+Result Correct!
+3 * 12 = 36
+Result Correct!
+3 * 13 = 39
+Result Correct!
+3 * 14 = 42
+Result Correct!
+3 * 15 = 45
+Result Correct!
+3 * 16 = 48
+Result Correct!
+4 * 0 = 0
+Result Correct!
+4 * 1 = 4
+Result Correct!
+4 * 2 = 8
+Result Correct!
+4 * 3 = 12
+Result Correct!
+4 * 4 = 16
+Result Correct!
+4 * 5 = 20
+Result Correct!
+4 * 6 = 24
+Result Correct!
+4 * 7 = 28
+Result Correct!
+4 * 8 = 32
+Result Correct!
+4 * 9 = 36
+Result Correct!
+4 * 10 = 40
+Result Correct!
+4 * 11 = 44
+Result Correct!
+4 * 12 = 48
+Result Correct!
+4 * 13 = 52
+Result Correct!
+4 * 14 = 56
+Result Correct!
+4 * 15 = 60
+Result Correct!
+4 * 16 = 64
+Result Correct!
+5 * 0 = 0
+Result Correct!
+5 * 1 = 5
+Result Correct!
+5 * 2 = 10
+Result Correct!
+5 * 3 = 15
+Result Correct!
+5 * 4 = 20
+Result Correct!
+5 * 5 = 25
+Result Correct!
+5 * 6 = 30
+Result Correct!
+5 * 7 = 35
+Result Correct!
+5 * 8 = 40
+Result Correct!
+5 * 9 = 45
+Result Correct!
+5 * 10 = 50
+Result Correct!
+5 * 11 = 55
+Result Correct!
+5 * 12 = 60
+Result Correct!
+5 * 13 = 65
+Result Correct!
+5 * 14 = 70
+Result Correct!
+5 * 15 = 75
+Result Correct!
+5 * 16 = 80
+Result Correct!
+6 * 0 = 0
+Result Correct!
+6 * 1 = 6
+Result Correct!
+6 * 2 = 12
+Result Correct!
+6 * 3 = 18
+Result Correct!
+6 * 4 = 24
+Result Correct!
+6 * 5 = 30
+Result Correct!
+6 * 6 = 36
+Result Correct!
+6 * 7 = 42
+Result Correct!
+6 * 8 = 48
+Result Correct!
+6 * 9 = 54
+Result Correct!
+6 * 10 = 60
+Result Correct!
+6 * 11 = 66
+Result Correct!
+6 * 12 = 72
+Result Correct!
+6 * 13 = 78
+Result Correct!
+6 * 14 = 84
+Result Correct!
+6 * 15 = 90
+Result Correct!
+6 * 16 = 96
+Result Correct!
+7 * 0 = 0
+Result Correct!
+7 * 1 = 7
+Result Correct!
+7 * 2 = 14
+Result Correct!
+7 * 3 = 21
+Result Correct!
+7 * 4 = 28
+Result Correct!
+7 * 5 = 35
+Result Correct!
+7 * 6 = 42
+Result Correct!
+7 * 7 = 49
+Result Correct!
+7 * 8 = 56
+Result Correct!
+7 * 9 = 63
+Result Correct!
+7 * 10 = 70
+Result Correct!
+7 * 11 = 77
+Result Correct!
+7 * 12 = 84
+Result Correct!
+7 * 13 = 91
+Result Correct!
+7 * 14 = 98
+Result Correct!
+7 * 15 = 105
+Result Correct!
+7 * 16 = 112
+Result Correct!
+8 * 0 = 0
+Result Correct!
+8 * 1 = 8
+Result Correct!
+8 * 2 = 16
+Result Correct!
+8 * 3 = 24
+Result Correct!
+8 * 4 = 32
+Result Correct!
+8 * 5 = 40
+Result Correct!
+8 * 6 = 48
+Result Correct!
+8 * 7 = 56
+Result Correct!
+8 * 8 = 64
+Result Correct!
+8 * 9 = 72
+Result Correct!
+8 * 10 = 80
+Result Correct!
+8 * 11 = 88
+Result Correct!
+8 * 12 = 96
+Result Correct!
+8 * 13 = 104
+Result Correct!
+8 * 14 = 112
+Result Correct!
+8 * 15 = 120
+Result Correct!
+8 * 16 = 128
+Result Correct!
+9 * 0 = 0
+Result Correct!
+9 * 1 = 9
+Result Correct!
+9 * 2 = 18
+Result Correct!
+9 * 3 = 27
+Result Correct!
+9 * 4 = 36
+Result Correct!
+9 * 5 = 45
+Result Correct!
+9 * 6 = 54
+Result Correct!
+9 * 7 = 63
+Result Correct!
+9 * 8 = 72
+Result Correct!
+9 * 9 = 81
+Result Correct!
+9 * 10 = 90
+Result Correct!
+9 * 11 = 99
+Result Correct!
+9 * 12 = 108
+Result Correct!
+9 * 13 = 117
+Result Correct!
+9 * 14 = 126
+Result Correct!
+9 * 15 = 135
+Result Correct!
+9 * 16 = 144
+Result Correct!
+10 * 0 = 0
+Result Correct!
+10 * 1 = 10
+Result Correct!
+10 * 2 = 20
+Result Correct!
+10 * 3 = 30
+Result Correct!
+10 * 4 = 40
+Result Correct!
+10 * 5 = 50
+Result Correct!
+10 * 6 = 60
+Result Correct!
+10 * 7 = 70
+Result Correct!
+10 * 8 = 80
+Result Correct!
+10 * 9 = 90
+Result Correct!
+10 * 10 = 100
+Result Correct!
+10 * 11 = 110
+Result Correct!
+10 * 12 = 120
+Result Correct!
+10 * 13 = 130
+Result Correct!
+10 * 14 = 140
+Result Correct!
+10 * 15 = 150
+Result Correct!
+10 * 16 = 160
+Result Correct!
+11 * 0 = 0
+Result Correct!
+11 * 1 = 11
+Result Correct!
+11 * 2 = 22
+Result Correct!
+11 * 3 = 33
+Result Correct!
+11 * 4 = 44
+Result Correct!
+11 * 5 = 55
+Result Correct!
+11 * 6 = 66
+Result Correct!
+11 * 7 = 77
+Result Correct!
+11 * 8 = 88
+Result Correct!
+11 * 9 = 99
+Result Correct!
+11 * 10 = 110
+Result Correct!
+11 * 11 = 121
+Result Correct!
+11 * 12 = 132
+Result Correct!
+11 * 13 = 143
+Result Correct!
+11 * 14 = 154
+Result Correct!
+11 * 15 = 165
+Result Correct!
+11 * 16 = 176
+Result Correct!
+12 * 0 = 0
+Result Correct!
+12 * 1 = 12
+Result Correct!
+12 * 2 = 24
+Result Correct!
+12 * 3 = 36
+Result Correct!
+12 * 4 = 48
+Result Correct!
+12 * 5 = 60
+Result Correct!
+12 * 6 = 72
+Result Correct!
+12 * 7 = 84
+Result Correct!
+12 * 8 = 96
+Result Correct!
+12 * 9 = 108
+Result Correct!
+12 * 10 = 120
+Result Correct!
+12 * 11 = 132
+Result Correct!
+12 * 12 = 144
+Result Correct!
+12 * 13 = 156
+Result Correct!
+12 * 14 = 168
+Result Correct!
+12 * 15 = 180
+Result Correct!
+12 * 16 = 192
+Result Correct!
+13 * 0 = 0
+Result Correct!
+13 * 1 = 13
+Result Correct!
+13 * 2 = 26
+Result Correct!
+13 * 3 = 39
+Result Correct!
+13 * 4 = 52
+Result Correct!
+13 * 5 = 65
+Result Correct!
+13 * 6 = 78
+Result Correct!
+13 * 7 = 91
+Result Correct!
+13 * 8 = 104
+Result Correct!
+13 * 9 = 117
+Result Correct!
+13 * 10 = 130
+Result Correct!
+13 * 11 = 143
+Result Correct!
+13 * 12 = 156
+Result Correct!
+13 * 13 = 169
+Result Correct!
+13 * 14 = 182
+Result Correct!
+13 * 15 = 195
+Result Correct!
+13 * 16 = 208
+Result Correct!
+14 * 0 = 0
+Result Correct!
+14 * 1 = 14
+Result Correct!
+14 * 2 = 28
+Result Correct!
+14 * 3 = 42
+Result Correct!
+14 * 4 = 56
+Result Correct!
+14 * 5 = 70
+Result Correct!
+14 * 6 = 84
+Result Correct!
+14 * 7 = 98
+Result Correct!
+14 * 8 = 112
+Result Correct!
+14 * 9 = 126
+Result Correct!
+14 * 10 = 140
+Result Correct!
+14 * 11 = 154
+Result Correct!
+14 * 12 = 168
+Result Correct!
+14 * 13 = 182
+Result Correct!
+14 * 14 = 196
+Result Correct!
+14 * 15 = 210
+Result Correct!
+14 * 16 = 224
+Result Correct!
+15 * 0 = 0
+Result Correct!
+15 * 1 = 15
+Result Correct!
+15 * 2 = 30
+Result Correct!
+15 * 3 = 45
+Result Correct!
+15 * 4 = 60
+Result Correct!
+15 * 5 = 75
+Result Correct!
+15 * 6 = 90
+Result Correct!
+15 * 7 = 105
+Result Correct!
+15 * 8 = 120
+Result Correct!
+15 * 9 = 135
+Result Correct!
+15 * 10 = 150
+Result Correct!
+15 * 11 = 165
+Result Correct!
+15 * 12 = 180
+Result Correct!
+15 * 13 = 195
+Result Correct!
+15 * 14 = 210
+Result Correct!
+15 * 15 = 225
+Result Correct!
+15 * 16 = 240
+Result Correct!
+16 * 0 = 0
+Result Correct!
+16 * 1 = 16
+Result Correct!
+16 * 2 = 32
+Result Correct!
+16 * 3 = 48
+Result Correct!
+16 * 4 = 64
+Result Correct!
+16 * 5 = 80
+Result Correct!
+16 * 6 = 96
+Result Correct!
+16 * 7 = 112
+Result Correct!
+16 * 8 = 128
+Result Correct!
+16 * 9 = 144
+Result Correct!
+16 * 10 = 160
+Result Correct!
+16 * 11 = 176
+Result Correct!
+16 * 12 = 192
+Result Correct!
+16 * 13 = 208
+Result Correct!
+16 * 14 = 224
+Result Correct!
+16 * 15 = 240
+Result Correct!
+16 * 16 = 256
+Result Correct!
+Multiplier is closed
+

@@ -17,26 +17,27 @@ struct RGB {
 };
 
 class myppm {
-
 public: 
 	RGB *pixel_map;
 	RGB *output_map;
 	myppm();
-	myppm(char* shape, int width0, int height0);
+	void ppm_init(char* shape, int width0, int height0);
 	int width, height;
-	void draw_poly(XY* vertex, int n0);
+	void draw_poly(void);
 private: 
 	char* type;
 	XY center;
 	XY* vertex;
+	int v_num;
 };
 
-myppm::myppm(char* shape, int width0, int height0) {
+void myppm::ppm_init(char* shape, int width0, int height0) {
 	if (shape == "star") {
-		vertex* = new XY[3];
+		XY* vertex = new XY[3];
 		vertex[0] = XY(2,0);
 		vertex[1] = XY(-2,2);
 		vertex[2] = XY(-3,-2);
+		v_num = 3;
 	}
 	width = width0;
 	height = height0;
@@ -47,7 +48,7 @@ myppm::myppm(char* shape, int width0, int height0) {
 }
 
 void myppm::draw_poly (void) {
-	my_poly polygon = my_poly(vertex, n0, center);
+	my_poly polygon = my_poly(vertex, v_num, center);
 	for(int i = 0; i < width; i++) {
 		for(int j = 0; j < height; j++) {
 			int index = j * width + i;

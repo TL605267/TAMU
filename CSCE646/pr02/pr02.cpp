@@ -28,6 +28,7 @@
 #include <string>
 #include <math.h>
 #include "myppm.h"
+
 using namespace std;
 
 // =============================================================================
@@ -91,7 +92,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	else {
-		ppm = ppm(argv[1], 800, 600);
+		ppm.ppm_init(argv[1], 800, 600);
 		glutInit(&argc, argv);
 		glutInitWindowPosition(100, 100); // Where the window will display on-screen.
 		glutInitWindowSize(ppm.width, ppm.height);

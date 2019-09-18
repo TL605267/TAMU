@@ -8,7 +8,7 @@
 #include <string>
 #include <algorithm>    // std::max
 
-#define PI = 3.14159265
+#define PI 3.14159265
 
 struct XY {
 	double x;
@@ -24,7 +24,7 @@ struct XY {
 struct RT {
 	double rho;
 	double theta;
-}
+};
 
 class my_poly {
 public:
@@ -73,18 +73,18 @@ RT my_poly::get_polar (XY p) {
 	double py = p.y - center.y;
 
 	RT p_rt;
-	double p_rt.rho = sqrt(px*px + py*py); // distance to center
-	double p_rt.phi = atan(py/px); // get angle from arctangent
+	p_rt.rho = sqrt(px*px + py*py); // distance to center
+	p_rt.theta = atan(py/px); // get angle from arctangent
 	if (px < 0 && py > 0) { // II || III
 		// II: -pi/4 => 3pi/4
 		// III: pi/4 => 5pi/4
-		p_rt.phi += PI; 
+		p_rt.theta += PI; 
 	}
 	else if (px > 0 && py < 0) { // IV
-		p_rt.phi -pi/4 => 7pi/4
-		phi += 2 * PI;
+		//p_rt.phi -pi/4 => 7pi/4
+		p_rt.theta += 2 * PI;
 	}
-	printf("p(%f, %f) => (%f, %f)is at %f degrees.\n", p.x, p.y, px, py, p_rt.phi * 180 / PI); // degree is easier to check
+	printf("p(%f, %f) => (%f, %f)is at %f degrees.\n", p.x, p.y, px, py, p_rt.theta * 180 / PI); // degree is easier to check
 	return p_rt;
 }
 
@@ -93,9 +93,12 @@ bool my_poly::is_fill(XY p) {
 	for (int i = 0; i < v_num; i++) {
 		RT p1 = v_rt[i%v_num];
 		RT p2 = v_rt[(i+1)%v_num];
+		XY p1_xy = vertex[i%v_num];
+		XY p2_xy = vertex[(i+1)%v_num];
+
 		if (p_rt.theta >= p1.theta && p_rt.theta < p2.theta) { // is theta is in the range
-			double a = get_a(p1, p2);
-			double b = get_b(p1, p2);
+			double a = get_a(p1_xy, p2_xy);
+			double b = get_b(p1_xy, p2_xy);
 			// my formula
 			double rho_center = abs(-1 / (a*cos(p_rt.theta) + b*sin(p_rt.theta)));
 			if (p_rt.rho > rho_center) return false;

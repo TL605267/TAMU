@@ -25,7 +25,7 @@ struct RGB {
 		blue = RGB2.blue;
 	}
 };
-
+	
 struct XY {
 	double x, y;
 	XY () {};
@@ -128,7 +128,7 @@ void myppm::clean_up(ifstream &file) {
 
 void myppm::transformation(double *mtrx, int dimension, XY point, char* argv) {
 
-	if (dimension != 2 && dimension != 3) {
+	if (dimension != 2 && dimension != 3 && dimension != 0) {
 		cout <<"Invalid dimension!" <<endl;
 		exit(-1);
 	}
@@ -136,7 +136,42 @@ void myppm::transformation(double *mtrx, int dimension, XY point, char* argv) {
 		translation = point;
 		output_map = new RGB[width * height];
 		RGB red = RGB(255,0,0);
-		if (dimension == 2) { // Rotation, Scaling, Shear, Mirror
+		if (dimension == 0) {
+			int index, new_index;
+			double x, y;
+			for(int i = 0; i < width; i++) {
+				for(int j = 0; j < height; j++) {
+					index = j * width + i;
+					y = int(5*sin(i) +1.1*j);
+					x = 1.1 * i;
+					if (x >= 0 && x < width && y >= 0 && y < height) {
+						new_index = int(y) * width + int(x);
+						if (MY_DEBUG) {
+							cout<<"Width ="<<width<<endl;
+							cout << "("<<i<<", "<<j<<") => ("<<x<<", "<<y<<"); [index = "<< index<<"]"<<endl;
+						}
+						if (new_index < size && new_index >= 0) {
+							output_map[new_index] = pixel_map[index];
+						}
+					}
+				}
+			}
+			// inverse mapping
+			for(int i = 0; i < width; i++) {
+				for(int j = 0; j < height; j++) {
+					index = j * width + i;
+					if (output_map[index].red == 0 && output_map[index].green == 0 && output_map[index].blue == 0) {
+						double x_origin = i / 1.1;
+						double y_origin = int((j - 5*sin(x_origin))/1.1);
+						if (x_origin >= 0 && y_origin >= 0 && x_origin <= double(width) && y_origin <= double(height)) {
+							XY index_xy = XY(x_origin,y_origin);						
+							output_map[index] = bilinear(index_xy);
+						}
+					}
+				}
+			}
+		}
+		else if (dimension == 2) { // Rotation, Scaling, Shear, Mirror
 			double x, y;
 			int index, new_index;
 			//center = XY(1920,1080);
@@ -214,7 +249,7 @@ void myppm::transformation(double *mtrx, int dimension, XY point, char* argv) {
 			
 			
 		}
-		if (dimension == 3) {
+		else if (dimension == 3 && (string)argv != "s" || (string)argv != "special") {
 
 			double x, y, z;
 			int index, new_index;

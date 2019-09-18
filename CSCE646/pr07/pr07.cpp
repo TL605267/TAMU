@@ -161,7 +161,7 @@ int main(int argc, char *argv[]) {
 	  	}
 	  	
 		if ((string)argv[1] == "special" || (string)argv[1] == "s") {
-			dem = 3;
+			dem = 0;
 			
 			mtrx[0] = 1;
 			mtrx[1] = 0;
@@ -175,12 +175,12 @@ int main(int argc, char *argv[]) {
 
 	  	}
 	  	
-	  	ppm.transformation(mtrx, dem, translation_point, argv[1] );
+	  	ppm.transformation(mtrx, dem, translation_point, argv[1]);
 		glutInit(&argc, argv);
 		glutInitWindowPosition(100, 100); // Where the window will display on-screen.
 		glutInitWindowSize(ppm.width, ppm.height);
 		glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE);
-		glutCreateWindow("pr06");
+		glutCreateWindow("pr07");
 		init();
 		glutReshapeFunc(windowResize);
 		glutDisplayFunc(ppmwindowDisplay);

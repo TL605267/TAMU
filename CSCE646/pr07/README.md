@@ -1,5 +1,5 @@
 # CSCE646 Project7: wrapping
-
+### Tong Lu
 ## Table of Contents
 1. [Problem Description](#problem-description)
 2. [Project Requirements](#project-requirements)
@@ -19,7 +19,7 @@ Bonus: Any additional work with bi-quadric or bi-cubic tranformations can give y
 For the required parts of the project, , implement your operations only using the basic programming operations such as while or for loops and basic mathematical operations such as addition, subtraction, multiplication, division and power. In other words, no high level operation provided by some programming languages such as matrix multiplication or matrix inversion is allowed.
 
 ## Code Description
-I only finished the first part of the requirement, and my program can transform the image as following:
+For part one, my program can transform the image as following:
 
 [0,0] =====> [187,33]
 
@@ -29,12 +29,20 @@ I only finished the first part of the requirement, and my program can transform 
 
 [510,340] => [282,225]
 
+For part two, my program can generate a special effect on a given image using sine wave. It will also fix all the unwanted artifacts using inverse mapping. 
+
 ## Build Instructions
 
 make
 
 ## Demo Instructions
 
+(mellieha.ppm is the example picture in the folder for demostration purpose)
+
 ### Bilinear
 
-./pr07 bilinear tower.ppm
+./pr07 bilinear mellieha.ppm
+
+### Special Effect
+
+./pr07 special mellieha.ppm
