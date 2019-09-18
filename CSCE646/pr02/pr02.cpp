@@ -17,7 +17,7 @@
 // http://www.cs.txstate.edu/labs/tutorials/tut_docs/Linux_Prog_Environment.pdf
 //
 // =============================================================================
-
+  
 #include <cstdlib>
 #include <iostream>
 #include <GL/glut.h>

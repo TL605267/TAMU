@@ -7,7 +7,7 @@
 #include <sstream>
 #include <string>
 #include <algorithm>    // std::max
-
+    
 #define PI 3.14159265
 
 struct XY {
