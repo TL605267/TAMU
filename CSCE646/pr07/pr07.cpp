@@ -28,6 +28,7 @@
 #include <string>
 #include <math.h>
 #include "myppm.h"
+
 using namespace std;
 
 // =============================================================================

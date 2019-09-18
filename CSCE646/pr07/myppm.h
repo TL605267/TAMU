@@ -338,7 +338,6 @@ RGB myppm::getpixel(XY point) {
 	}
 }
 	
-
 RGB myppm::bilinear(XY point) { //https://en.wikipedia.org/wiki/Bilinear_interpolation
 	double x, y, x1, x2, y1, y2;
 	XY Q11, Q12, Q21, Q22;
